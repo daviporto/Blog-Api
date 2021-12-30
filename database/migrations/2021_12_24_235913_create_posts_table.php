@@ -14,10 +14,10 @@ class CreatePostsTable extends Migration
     public function up()
     {
         Schema::create('posts', function (Blueprint $table) {
-            $table->id();
+            $table->id()->autoIncrement();
             $table->string('content', 280);
-            $table->boolean('edited');
-            $table->bigInteger('user_id')->unsigned();;
+            $table->boolean('edited')->default(false);
+            $table->bigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });

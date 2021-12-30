@@ -13,7 +13,7 @@ class UpdatePostRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +24,15 @@ class UpdatePostRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'content' => 'required|max:280',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'content.required'  => 'content cannot be empty',
+            'content.max'  => 'content must be at most 280 characters',
         ];
     }
 }

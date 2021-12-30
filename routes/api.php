@@ -4,6 +4,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JWTController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,5 +24,14 @@ Route::group(
     Route::post('/register', [JWTController::class, 'register']);
     Route::post('/login', [JWTController::class, 'login']);
     Route::post('/logout', [JWTController::class, 'logout']);
+    Route::get('/me', [JWTController::class, 'me']);
     Route::post('/verify', [JWTController::class, 'verify']);
+
+
+
+    //Post related 
+    Route::resource('/post', PostController::class);
+    //workaround php  7 does not parse multi part form data unless the request method is POST 
+    // https://github.com/laravel/framework/issues/13457
+    Route::post('/post/{id}', 'PostController@update');
 });

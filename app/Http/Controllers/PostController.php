@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
+use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
@@ -15,7 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        return Post::paginate(10);
     }
 
     /**
@@ -36,7 +37,12 @@ class PostController extends Controller
      */
     public function store(StorePostRequest $request)
     {
-        //
+        $post =[ 
+            'content' => $request->content,
+            'edited' => false,
+            'user_id' => auth()->user()->id,
+        ];
+        Post::create($post);
     }
 
     /**
@@ -68,9 +74,12 @@ class PostController extends Controller
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdatePostRequest $request, Post $post)
+    public function update(UpdatePostRequest $request,  $id)
     {
-        //
+        $post = Post::find($id);
+        $post->content = $request->content;
+        $post ->save();
+
     }
 
     /**
@@ -81,6 +90,6 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        Post::destroy($post->id);
     }
 }

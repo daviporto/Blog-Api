@@ -22,6 +22,7 @@ class JWTController extends Controller
 
     public function register(RegisterUserRequest $request)
     {
+        // return $request->password;
         return User::create(
             [
                 'name' => $request->name,
@@ -52,10 +53,19 @@ class JWTController extends Controller
      * Get the authenticated User.
      *
      * @return \Illuminate\Http\JsonResponse
+     * return response()->json(auth()->user());
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        $user = auth()->user();
+        return response()->json(
+            [
+                'id'=> $user->id,
+                'name'=> $user->name,
+                'email'=> $user->email,
+                'phone'=> $user->phone,
+            ]
+        );
     }
 
     /**

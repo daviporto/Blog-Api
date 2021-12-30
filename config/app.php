@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Post;
+
 return [
 
     /*
@@ -177,6 +179,8 @@ return [
 
         //JWT
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+
+        //Post related
         
 
     ],

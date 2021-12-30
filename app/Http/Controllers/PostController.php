@@ -78,6 +78,7 @@ class PostController extends Controller
     {
         $post = Post::find($id);
         $post->content = $request->content;
+        $post->edited = true;
         $post ->save();
 
     }

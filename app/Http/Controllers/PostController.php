@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
-use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -16,7 +17,11 @@ class PostController extends Controller
      */
     public function index()
     {
-        return Post::paginate(10);
+        return DB::table('users')
+        ->join('posts', 'users.id', '=', 'posts.user_id')
+        ->orderBy('posts.created_at', 'desc')
+        ->select('posts.*', 'users.name', 'users.id')
+        ->paginate(15);
     }
 
     /**
@@ -36,8 +41,8 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(StorePostRequest $request)
-    {
-        $post =[ 
+    {   
+        $post = [
             'content' => $request->content,
             'edited' => false,
             'user_id' => auth()->user()->id,
@@ -79,8 +84,7 @@ class PostController extends Controller
         $post = Post::find($id);
         $post->content = $request->content;
         $post->edited = true;
-        $post ->save();
-
+        $post->save();
     }
 
     /**

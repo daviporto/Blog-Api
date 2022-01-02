@@ -20,7 +20,7 @@ class PostController extends Controller
         return DB::table('users')
         ->join('posts', 'users.id', '=', 'posts.user_id')
         ->orderBy('posts.created_at', 'desc')
-        ->select('posts.*', 'users.name', 'users.id')
+        ->select('posts.*', 'users.name')
         ->paginate(15);
     }
 

@@ -21,8 +21,7 @@ class JWTController extends Controller
 
 
     public function register(RegisterUserRequest $request)
-    {
-        // return $request->password;
+    {//cria e retorna o usuário recem criado 
         return User::create(
             [
                 'name' => $request->name,
@@ -56,7 +55,7 @@ class JWTController extends Controller
      * return response()->json(auth()->user());
      */
     public function me()
-    {
+    {//retorna as informações importantes sobre o usuário autenticado 
         $user = auth()->user();
         return response()->json(
             [
@@ -107,8 +106,9 @@ class JWTController extends Controller
     }
 
     public function verify(){
+        //verifica se está autenticado
         return response()->json([
-            'message' => 'you got here man ',
+            'message' => 'Sucesso',
         ]);
     }
 }

@@ -15,10 +15,10 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->string('content', 280);
+            $table->string('content', 280);//texto do post 
             $table->boolean('edited')->default(false);
             $table->bigInteger('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users');//autor do post 
             $table->timestamps();
         });
     }

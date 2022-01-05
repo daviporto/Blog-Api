@@ -34,15 +34,16 @@ class RegisterUserRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required'  => 'name cannot be empty ',
-            'password.required'  => 'password cannot be empty ',
-            'password.min' => 'password must be at least 6 characters',
-            'email.required'  => 'email cannot be empty ',
-            'email.email'  => 'email is invalid',
-            'email.unique'  => 'email already in use ',
-            'phone.required'  => 'phone cannot be empty ',
-            'phone.unique'  => 'phone already in use ',
-            'phone.numeric' => 'phone must be only numbers'
+            'name.required'  => 'nome não pode ser vazio',
+            'password.required'  => 'senha não pode ser vazia',
+            'password.min' => ' senha deve conter pelo menos 6 caracteres',
+            'email.required'  => 'email não pode ser vazio ',
+            'email.email'  => 'email inválido',
+            'email.unique'  => 'email já está em use ',
+            'phone.required'  => 'telefone não pode ser vazio',
+            'phone.unique'  => 'telefone já está em use ',
+            'phone.numeric' => 'telefone deve conter apenas números',
+            'phone.max' => 'telefone deve conter 12 números',
         ];
     }
 }

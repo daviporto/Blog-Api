@@ -17,22 +17,13 @@ class PostController extends Controller
      */
     public function index()
     {
-        return DB::table('users')
-        ->join('posts', 'users.id', '=', 'posts.user_id')
-        ->orderBy('posts.created_at', 'desc')
-        ->select('posts.*', 'users.name')
-        ->paginate(15);
+        return User::select('posts.*', 'users.name')
+            ->leftJoin('posts', 'users.id', '=', 'posts.user_id') //Combina o post e nome do usuário que o escreveu
+            ->orderBy('posts.created_at', 'desc') //mais novo pro mais antigo 
+            ->paginate(15);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -41,36 +32,15 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(StorePostRequest $request)
-    {   
+    {
         $post = [
-            'content' => $request->content,
-            'edited' => false,
-            'user_id' => auth()->user()->id,
+            'content' => $request->content, //texto do post
+            'edited' => false, //criado agora, portanto não editado 
+            'user_id' => auth()->user()->id, // user que fez a requisição 
         ];
-        Post::create($post);
+        return Post::create($post); //retorna o post recem criado para tratamento no App 
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Post $post)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Post  $post
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Post $post)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -82,9 +52,10 @@ class PostController extends Controller
     public function update(UpdatePostRequest $request,  $id)
     {
         $post = Post::find($id);
-        $post->content = $request->content;
-        $post->edited = true;
-        $post->save();
+        $post->content = $request->content; // substitui o texto do post 
+        $post->edited = true; //true == editado
+        $post->save(); //persiste as mudanças 
+        return $post; // retorna o novo post para tratamento no App. 
     }
 
     /**
@@ -95,6 +66,9 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        Post::destroy($post->id);
+        Post::destroy($post->id); //deleta o post solicitado
+        return response()->json([
+            'id' => $post->id, //retorna o id do post deletado para tratamento no App
+        ]);
     }
 }

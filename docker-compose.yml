@@ -1,0 +1,39 @@
+version: "3.1"
+volumes:
+    blog-database-data:
+        driver: local
+services:
+    mysql:
+        image: mysql
+        container_name: blog-database
+        volumes:
+            - blog-database-data:/var/lib/mysql
+        ports:
+            - "3306:3306"
+        environment:
+            - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+            - MYSQL_DATABASE=${DB_DATABASE}
+    php-fpm:
+        build: ./docker
+        container_name: blog-php
+        extra_hosts:
+            - host.docker.internal:host-gateway
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www/
+            - ./docker/xdebug.ini:/etc/php/8.2/mods-available/xdebug.ini
+        environment:
+            - PHP_IDE_CONFIG=serverName=${APP_NAME}
+
+    webserver:
+        image: nginx:alpine
+        container_name: blog-server
+        working_dir: /var/www
+        depends_on:
+            - php-fpm
+        volumes:
+            - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
+            - ./:/var/www/
+        ports:
+            - "80:80"
+

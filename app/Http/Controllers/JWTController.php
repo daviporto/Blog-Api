@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Http\Requests\RegisterUserRequest;
+use App\Prototype\RegisterRequestPrototype;
 use App\Service\UserService;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-
+use Symfony\Component\HttpFoundation\Response;
 
 class JWTController extends Controller
 {
@@ -27,11 +26,13 @@ class JWTController extends Controller
     {
         try {
             DB::beginTransaction();
-            app(UserService::class)->createUser();
+            app(UserService::class)->createUser(RegisterRequestPrototype::fromRequest($request->all()));
             DB::commit();
+            return response()->noContent();
         } catch (\Exception $exception) {
             Log::error($exception);
             DB::rollBack();
+            return response()->json(['error' => 'Server error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -43,7 +44,6 @@ class JWTController extends Controller
     public function login()
     {
         $credentials = request(['email', 'password']);
-        // return $credentials;
         if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }

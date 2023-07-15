@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Http\Requests\RegisterUserRequest;
+use App\Service\UserService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 
 class JWTController extends Controller
@@ -21,15 +24,15 @@ class JWTController extends Controller
 
 
     public function register(RegisterUserRequest $request)
-    {//cria e retorna o usuário recem criado 
-        return User::create(
-            [
-                'name' => $request->name,
-                'email' => $request->email,
-                'phone' => $request->phone,
-                'password' => Hash::make($request->password)
-            ]
-        );
+    {
+        try {
+            DB::beginTransaction();
+            app(UserService::class)->createUser();
+            DB::commit();
+        } catch (\Exception $exception) {
+            Log::error($exception);
+            DB::rollBack();
+        }
     }
 
     /**
@@ -49,20 +52,36 @@ class JWTController extends Controller
     }
 
     /**
+     * Get the token array structure.
+     *
+     * @param string $token
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60 * 24
+        ]);
+    }
+
+    /**
      * Get the authenticated User.
      *
      * @return \Illuminate\Http\JsonResponse
      * return response()->json(auth()->user());
      */
     public function me()
-    {//retorna as informações importantes sobre o usuário autenticado 
+    {//retorna as informações importantes sobre o usuário autenticado
         $user = auth()->user();
         return response()->json(
             [
-                'id'=> $user->id,
-                'name'=> $user->name,
-                'email'=> $user->email,
-                'phone'=> $user->phone,
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->phone,
             ]
         );
     }
@@ -89,23 +108,8 @@ class JWTController extends Controller
         return $this->respondWithToken(auth()->refresh());
     }
 
-    /**
-     * Get the token array structure.
-     *
-     * @param  string $token
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    protected function respondWithToken($token)
+    public function verify()
     {
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60 * 24 
-        ]);
-    }
-
-    public function verify(){
         //verifica se está autenticado
         return response()->json([
             'message' => 'Sucesso',

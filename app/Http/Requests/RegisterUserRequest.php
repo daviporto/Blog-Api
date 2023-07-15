@@ -6,22 +6,13 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterUserRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
+
+    public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'required',
@@ -31,19 +22,19 @@ class RegisterUserRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
-            'name.required'  => 'nome não pode ser vazio',
-            'password.required'  => 'senha não pode ser vazia',
-            'password.min' => ' senha deve conter pelo menos 6 caracteres',
-            'email.required'  => 'email não pode ser vazio ',
-            'email.email'  => 'email inválido',
-            'email.unique'  => 'email já está em use ',
-            'phone.required'  => 'telefone não pode ser vazio',
-            'phone.unique'  => 'telefone já está em use ',
-            'phone.numeric' => 'telefone deve conter apenas números',
-            'phone.max' => 'telefone deve conter 12 números',
+            'name.required' => trans('validation.name.required'),
+            'password.required' => trans('validation.password.required'),
+            'password.min' => trans('validation.password.min'),
+            'email.required' => trans('validation.email.required'),
+            'email.email' => trans('validation.email.email'),
+            'email.unique' => trans('validation.email.unique'),
+            'phone.required' => trans('validation.phone.required'),
+            'phone.unique' => trans('validation.phone.unique'),
+            'phone.numeric' => trans('validation.phone.numeric'),
+            'phone.max' => trans('validation.phone.max'),
         ];
     }
 }

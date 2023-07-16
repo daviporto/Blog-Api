@@ -7,6 +7,7 @@ return [
     'email.required' => 'Email cannot be empty',
     'email.email' => 'Invalid email',
     'email.unique' => 'Email is already in use',
+    'email.exists' => 'User not registered',
     'phone.required' => 'Phone number cannot be empty',
     'phone.unique' => 'Phone number is already in use',
     'phone.numeric' => 'Phone number must contain only numbers',

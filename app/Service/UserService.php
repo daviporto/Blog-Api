@@ -18,4 +18,5 @@ class UserService
             'password' => Hash::make($prototype->getPassword())
         ]);
     }
+
 }

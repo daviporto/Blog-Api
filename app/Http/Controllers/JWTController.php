@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterUserRequest;
+use App\Http\Resources\UserResource;
 use App\Prototype\RegisterRequestPrototype;
 use App\Service\UserService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +26,7 @@ class JWTController extends Controller
     }
 
 
-    public function register(RegisterUserRequest $request)
+    public function register(RegisterUserRequest $request): Response
     {
         try {
             DB::beginTransaction();
@@ -71,20 +74,11 @@ class JWTController extends Controller
     /**
      * Get the authenticated User.
      *
-     * @return \Illuminate\Http\JsonResponse
-     * return response()->json(auth()->user());
+     * @return UserResource
      */
-    public function me()
-    {//retorna as informações importantes sobre o usuário autenticado
-        $user = auth()->user();
-        return response()->json(
-            [
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email,
-                'phone' => $user->phone,
-            ]
-        );
+    public function me(): UserResource
+    {
+        return new UserResource(auth()->user());
     }
 
     /**
@@ -92,11 +86,11 @@ class JWTController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function logout()
+    public function logout(): Response
     {
         auth()->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json(['message' => trans('auth.logout')]);
     }
 
     /**
@@ -104,16 +98,15 @@ class JWTController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function refresh()
+    public function refresh(): Response
     {
         return $this->respondWithToken(auth()->refresh());
     }
 
-    public function verify()
+    public function verify(): Response
     {
-        //verifica se está autenticado
         return response()->json([
-            'message' => 'Sucesso',
+            'message' => trans('auth.success'),
         ]);
     }
 }

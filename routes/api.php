@@ -24,7 +24,7 @@ Route::group(
         Route::group(['prefix' => 'auth'], function () {
             Route::post('login', [JWTController::class, 'login']);
             Route::post('logout', [JWTController::class, 'logout']);
-            Route::post('me', [JWTController::class, 'me']);
+            Route::get('me', [JWTController::class, 'me']);
             Route::post('/verify', [JWTController::class, 'verify']);
             Route::post('/register', [JWTController::class, 'register']);
         });

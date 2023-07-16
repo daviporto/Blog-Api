@@ -15,7 +15,7 @@ class LoginTest extends TestCase
     {
         $payload = $this->generatePayload();
 
-        $response = $this->json('POST', self::ROUTE, $payload)->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+        $this->json('POST', self::ROUTE, $payload)->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonStructure([
                 'message',
                 'errors' => ['email']
@@ -62,5 +62,4 @@ class LoginTest extends TestCase
                 'expires_in'
             ]);
     }
-
 }

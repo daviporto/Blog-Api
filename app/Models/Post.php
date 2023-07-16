@@ -24,6 +24,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Post whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Post whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Post whereUserId($value)
+ * @property string|null $title
+ * @method static \Illuminate\Database\Eloquent\Builder|Post whereTitle($value)
  * @mixin \Eloquent
  */
 class Post extends Model

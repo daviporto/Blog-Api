@@ -2,25 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\IndexPostRequest;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
+use App\Http\Resources\PostResource;
 use App\Models\Post;
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
+use App\Service\PostService;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class PostController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function index(IndexPostRequest $request): AnonymousResourceCollection
     {
-        return User::select('posts.*', 'users.name')
-            ->leftJoin('posts', 'users.id', '=', 'posts.user_id') //Combina o post e nome do usuário que o escreveu
-            ->orderBy('posts.created_at', 'desc') //mais novo pro mais antigo
-            ->paginate(15);
+        $posts = app(PostService::class)->getUserPosts(auth()->user(), $request->per_page ?? null);
+        return PostResource::collection($posts);
     }
 
 

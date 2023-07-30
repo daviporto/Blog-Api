@@ -24,6 +24,7 @@ class StorePostRequest extends FormRequest
     public function rules()
     {
         return [
+            'tile' => 'string|max:50',
             'content' => 'required|max:280',
         ];
     }
@@ -31,8 +32,7 @@ class StorePostRequest extends FormRequest
     public function messages()
     {
         return [
-            'content.required'  => 'content cannot be empty',
-            'content.max'  => 'content must be at most 280 characters',
+            'content.required'  => trans('post.content.required'),
         ];
     }
 }

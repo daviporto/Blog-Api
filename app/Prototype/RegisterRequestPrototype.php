@@ -4,10 +4,10 @@ namespace App\Prototype;
 
 class RegisterRequestPrototype
 {
-    public string $name;
-    public string $password;
-    public string $email;
-    public string $phone;
+    private string $name;
+    private string $password;
+    private string $email;
+    private string $phone;
 
     public static function fromRequest(array $data): self
     {

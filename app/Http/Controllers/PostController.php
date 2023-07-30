@@ -2,13 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DeletePostRequest;
 use App\Http\Requests\IndexPostRequest;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
+use App\Prototype\DeletePostRequestPrototype;
+use App\Prototype\PostRequestPrototype;
+use App\Prototype\UpdatePostRequestPrototype;
 use App\Service\PostService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response as IluminateResponse;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -21,49 +28,59 @@ class PostController extends Controller
 
 
     /**
-     * Store a newly created resource in storage.
      *
-     * @param \App\Http\Requests\StorePostRequest $request
-     * @return \Illuminate\Http\Response
+     * @param StorePostRequest $request
+     * @return JsonResponse|IluminateResponse
      */
-    public function store(StorePostRequest $request)
+    public function store(StorePostRequest $request): JsonResponse|IluminateResponse
     {
-        $post = [
-            'content' => $request->content, //texto do post
-            'edited' => false, //criado agora, portanto não editado
-            'user_id' => auth()->user()->id, // user que fez a requisição
-        ];
-        return Post::create($post); //retorna o post recem criado para tratamento no App
+        try {
+            DB::beginTransaction();
+            app(PostService::class)->storePost(PostRequestPrototype::fromRequest($request->all()));
+            DB::commit();
+            return response()->noContent();
+        } catch (\Exception $exception) {
+            return $this->handleException($exception);
+        }
     }
 
 
     /**
      * Update the specified resource in storage.
      *
-     * @param \App\Http\Requests\UpdatePostRequest $request
-     * @param \App\Models\Post $post
-     * @return \Illuminate\Http\Response
+     * @param UpdatePostRequest $request
+     * @return JsonResponse|IluminateResponse
+     * @throws \Throwable
      */
-    public function update(UpdatePostRequest $request, $id)
+    public function update(UpdatePostRequest $request):JsonResponse|IluminateResponse
     {
-        $post = Post::find($id);
-        $post->content = $request->content; // substitui o texto do post
-        $post->edited = true; //true == editado
-        $post->save(); //persiste as mudanças
-        return $post; // retorna o novo post para tratamento no App.
+        try {
+            DB::beginTransaction();
+            app(PostService::class)->updatePost(UpdatePostRequestPrototype::fromRequest($request->all()));
+            DB::commit();
+            return response()->noContent();
+        } catch (\Exception $exception) {
+            return $this->handleException($exception);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Post $post
-     * @return \Illuminate\Http\Response
+     * @param DeletePostRequest $request
+     * @return IluminateResponse|JsonResponse
+     * @throws \Throwable
      */
-    public function destroy(Post $post)
+    public function destroy(DeletePostRequest $request):IluminateResponse|JsonResponse
     {
-        Post::destroy($post->id); //deleta o post solicitado
-        return response()->json([
-            'id' => $post->id, //retorna o id do post deletado para tratamento no App
-        ]);
+        try {
+            DB::beginTransaction();
+            app(PostService::class)->deletePost(DeletePostRequestPrototype::fromRequest($request->all()));
+            DB::commit();
+            return response()->noContent();
+        } catch (\Exception $exception) {
+            return $this->handleException($exception);
+        }
     }
+
 }

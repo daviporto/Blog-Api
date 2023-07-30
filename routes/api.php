@@ -30,5 +30,6 @@ Route::group(
         });
 
     //Post related
-    Route::resource('/post', PostController::class);
+    Route::resource('/post', PostController::class)
+        ->only(['index', 'store', 'destroy', 'update']);
 });

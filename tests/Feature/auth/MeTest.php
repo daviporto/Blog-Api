@@ -12,9 +12,8 @@ class MeTest extends TestCase
 
     public function testNonexistentEmail()
     {
-        /** @var User $user */
-        $user = User::factory()->create();
-        $this->actingAs($user)->json('GET', self::ROUTE)->assertStatus(Response::HTTP_OK)
+        $this->makeUser();
+        $this->actingAs($this->user)->json('GET', self::ROUTE)->assertStatus(Response::HTTP_OK)
             ->assertJsonStructure([
                 'data' => [
                     'name',
@@ -28,10 +27,10 @@ class MeTest extends TestCase
             ])
             ->assertJson([
                 'data' => [
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'phone' => $user->phone,
-                    'id' => $user->id,
+                    'name' => $this->user->name,
+                    'email' => $this->user->email,
+                    'phone' => $this->user->phone,
+                    'id' => $this->user->id,
                 ],
             ]);
     }

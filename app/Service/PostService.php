@@ -6,7 +6,6 @@ use App\Models\Post;
 use App\Models\User;
 use App\Prototype\DeletePostRequestPrototype;
 use App\Prototype\PostRequestPrototype;
-use App\Prototype\UpdatePostRequestPrototype;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -30,9 +29,9 @@ class PostService
         );
     }
 
-    public function updatePost(UpdatePostRequestPrototype $postPrototype): void
+    public function updatePost(PostRequestPrototype $postPrototype, Post $post): void
     {
-        Post::findOrFail($postPrototype->getId())->update(
+        $post->update(
             [
                 'title' => $postPrototype->getTitle(),
                 'content' => $postPrototype->getContent(),

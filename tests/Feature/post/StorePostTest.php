@@ -3,22 +3,52 @@
 namespace Tests\Feature\post;
 
 use App\Models\User;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\TestCase;
 
 class StorePostTest extends TestCase
 {
-    const ROUTE = self::BASE_ROUTE . 'post/create';
+    const ROUTE = self::BASE_ROUTE . 'post';
 
-    public function testStorePostWithRequiredFields(): void
+    public function testUnauthorized(): void
+    {
+        $this->json(
+            'POST',
+            self::ROUTE,
+            ['asdsa']
+        )->assertStatus(Response::HTTP_UNAUTHORIZED);
+    }
+
+    public function testWithRequiredPayload(): void
     {
         $this->makeUser();
-        $response = $this->json(
-            'PUT',
+        $payload = $this->getRequiredPayload();
+        $response = $this->actingAs($this->user)
+            ->json(
+            'POST',
             self::ROUTE,
-            $this->getRequiredPayload()
-        );
+                $payload
+        )->assertStatus(Response::HTTP_NO_CONTENT);
 
-        $response->assertStatus(201);
+        $this->assertDatabaseHas('posts',
+            array_merge($payload, ['user_id' => $this->user->id])
+        );
+    }
+
+    public function testWithFullPayload(): void
+    {
+        $this->makeUser();
+        $payload = $this->getFullPayload();
+        $response = $this->actingAs($this->user)
+            ->json(
+                'POST',
+                self::ROUTE,
+                $payload
+            )->assertStatus(Response::HTTP_NO_CONTENT);
+
+        $this->assertDatabaseHas('posts',
+            array_merge($payload, ['user_id' => $this->user->id])
+        );
     }
 
 

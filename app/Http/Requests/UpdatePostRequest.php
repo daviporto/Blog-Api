@@ -3,45 +3,25 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class UpdatePostRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules(): array
     {
         return [
-            'id' => [
-                'required',
-                'integer',
-                Rule::exists('posts', 'id')->where(function ($query) {
-                    $query->where('user_id', auth()->user()->id);
-                }),
-            ],
             'content' => 'required|max:280',
-            'title' => 'string|max:50',
+            'title'   => 'string|max:50',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'content.required' => trans('post.content.required'),
-            'id.exists' => trans('post.id.exists'),
-        ];
+            'content.required' => trans('post.content.required'),];
     }
 }

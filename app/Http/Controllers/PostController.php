@@ -10,7 +10,6 @@ use App\Http\Resources\PostResource;
 use App\Models\Post;
 use App\Prototype\DeletePostRequestPrototype;
 use App\Prototype\PostRequestPrototype;
-use App\Prototype\UpdatePostRequestPrototype;
 use App\Service\PostService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -27,11 +26,6 @@ class PostController extends Controller
     }
 
 
-    /**
-     *
-     * @param StorePostRequest $request
-     * @return JsonResponse|IluminateResponse
-     */
     public function store(StorePostRequest $request): JsonResponse|IluminateResponse
     {
         try {
@@ -44,19 +38,11 @@ class PostController extends Controller
         }
     }
 
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param UpdatePostRequest $request
-     * @return JsonResponse|IluminateResponse
-     * @throws \Throwable
-     */
-    public function update(UpdatePostRequest $request):JsonResponse|IluminateResponse
+    public function update(UpdatePostRequest $request, Post $post):JsonResponse|IluminateResponse
     {
         try {
             DB::beginTransaction();
-            app(PostService::class)->updatePost(UpdatePostRequestPrototype::fromRequest($request->all()));
+            app(PostService::class)->updatePost(PostRequestPrototype::fromRequest($request->all()), $post);
             DB::commit();
             return response()->noContent();
         } catch (\Exception $exception) {

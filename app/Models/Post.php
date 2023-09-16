@@ -36,6 +36,7 @@ class Post extends Model
     protected $fillable = [
         'content',
         'edited',
+        'title',
         'user_id',
     ];
 }

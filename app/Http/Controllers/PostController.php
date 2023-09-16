@@ -50,18 +50,11 @@ class PostController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param DeletePostRequest $request
-     * @return IluminateResponse|JsonResponse
-     * @throws \Throwable
-     */
-    public function destroy(DeletePostRequest $request):IluminateResponse|JsonResponse
+    public function destroy(DeletePostRequest $request, Post $post):IluminateResponse|JsonResponse
     {
         try {
             DB::beginTransaction();
-            app(PostService::class)->deletePost(DeletePostRequestPrototype::fromRequest($request->all()));
+            app(PostService::class)->deletePost($post);
             DB::commit();
             return response()->noContent();
         } catch (\Exception $exception) {

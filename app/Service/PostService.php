@@ -40,9 +40,9 @@ class PostService
         );
     }
 
-    public function deletePost(DeletePostRequestPrototype $prototype): void
+    public function deletePost(Post $post): void
     {
-        Post::destroy($prototype->getId());
+        $post->delete();
     }
 
 }

@@ -12,8 +12,8 @@ Route::group(
             Route::post('login', [JWTController::class, 'login']);
             Route::post('logout', [JWTController::class, 'logout'])->middleware('auth:api');
             Route::get('me', [JWTController::class, 'me'])->middleware('auth:api');
-            Route::post('/verify', [JWTController::class, 'verify'])->middleware('auth:api');
-            Route::post('/register', [JWTController::class, 'register']);
+            Route::post('verify', [JWTController::class, 'verify'])->middleware('auth:api');
+            Route::post('register', [JWTController::class, 'register']);
         });
 
         Route::resource('/post', PostController::class)

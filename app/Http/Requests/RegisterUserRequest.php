@@ -15,7 +15,7 @@ class RegisterUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required',
+            'name' => 'required|string',
             'password' => 'required|min:6|string',
             'email' => 'required|email|unique:users,email,' . $this->user,
             'phone' => 'required|numeric|unique:users,phone,' . $this->user,

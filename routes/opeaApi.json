@@ -1,0 +1,261 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Blog",
+        "description": "Blog",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:80/api"
+        }
+    ],
+    "paths": {
+        "/auth/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/register"
+                },
+                "description": "register new user",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/login"
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "description": "Login",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/loginRequest"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/login"
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "description": "Logout",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/logout"
+                    }
+                }
+            }
+        },
+        "/auth/verify": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "description": "Verify is user is logged in",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/verify"
+                    }
+                }
+            }
+        },
+        "/auth/me": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "description": "logged user info",
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/me"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "UserResource": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "User's id"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "aa@gmail.com",
+                        "description": "User's email"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "31984664949",
+                        "description": "Larinha's password"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Larinha",
+                        "description": "User's name"
+                    }
+                }
+            }
+        },
+        "requestBodies": {
+            "register": {
+                "description": "User register request body",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "email",
+                                "password",
+                                "name",
+                                "phone"
+                            ],
+                            "properties": {
+                                "email": {
+                                    "type": "string",
+                                    "example": "aa@gmail.com",
+                                    "description": "User's email"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "example": "asd34sdd",
+                                    "description": "User's password"
+                                },
+                                "phone": {
+                                    "type": "string",
+                                    "example": "31984664949",
+                                    "description": "Larinha's phone"
+                                },
+                                "name": {
+                                    "type": "string",
+                                    "example": "Larinha",
+                                    "description": "User's name"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "loginRequest": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "required": [
+                                "email",
+                                "password"
+                            ],
+                            "properties": {
+                                "email": {
+                                    "type": "string",
+                                    "example": "aa@gmail.com",
+                                    "description": "User's email"
+                                },
+                                "password": {
+                                    "type": "string",
+                                    "example": "asd34sdd",
+                                    "description": "User's password"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            }
+        },
+        "responses": {
+            "200": {
+                "description": "New response",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "": ""
+                        }
+                    }
+                }
+            },
+            "login": {
+                "description": "logged in successful",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "access_token": {
+                                    "type": "string",
+                                    "description": "Access Token for authenticated user"
+                                },
+                                "token_type": {
+                                    "type": "string",
+                                    "description": "The type of token used",
+                                    "example": "bearer"
+                                },
+                                "expires_in": {
+                                    "type": "integer",
+                                    "description": "Expiry time of the token in seconds",
+                                    "example": 86400
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "logout": {
+                "description": "Successfully logged out",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "description": "Successfully logged out"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "verify": {
+                "description": "User is logged in",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "description": "Successful"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "me": {
+                "description": "user info",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/UserResource"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

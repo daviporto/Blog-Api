@@ -8,9 +8,9 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Http\Resources\PostResource;
 use App\Models\Post;
-use App\Prototype\DeletePostRequestPrototype;
 use App\Prototype\PostRequestPrototype;
 use App\Service\PostService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response as IluminateResponse;
@@ -33,7 +33,7 @@ class PostController extends Controller
             app(PostService::class)->storePost(PostRequestPrototype::fromRequest($request->all()));
             DB::commit();
             return response()->noContent();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return $this->handleException($exception);
         }
     }
@@ -45,7 +45,7 @@ class PostController extends Controller
             app(PostService::class)->updatePost(PostRequestPrototype::fromRequest($request->all()), $post);
             DB::commit();
             return response()->noContent();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return $this->handleException($exception);
         }
     }
@@ -57,7 +57,7 @@ class PostController extends Controller
             app(PostService::class)->deletePost($post);
             DB::commit();
             return response()->noContent();
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return $this->handleException($exception);
         }
     }

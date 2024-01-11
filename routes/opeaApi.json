@@ -81,6 +81,52 @@
                     }
                 }
             }
+        },
+        "/post": {
+            "post": {
+                "tags": ["Post"],
+                "description": "Create new post",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/storePostRequest"
+                },
+                "responses": {
+                    "204": {"description": "No content"},
+                    "422": {"description": "Unprocessable Entity"},
+                    "401": {"description": "Unauthorized"}
+                }
+            },
+            "get": {
+                "tags": ["Post"],
+                "description": "Get all posts",
+                "responses": {
+                    "401": {"description": "Unauthorized"},
+                    "200": {"$ref": "#/components/responses/ListPosts"}
+                }
+            }
+        },
+        "/post/{id}": {
+            "put": {
+                "tags": ["Post"],
+                "description": "Update post",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/storePostRequest"
+                },
+                "responses": {
+                    "204": {"description": "No content"},
+                    "422": {"description": "Unprocessable Entity"},
+                    "404": {"description": "Not found"},
+                    "401": {"description": "Unauthorized"}
+                }
+            },
+            "delete": {
+                "tags": ["Post"],
+                "description": "Delete post",
+                "responses": {
+                    "204": {"description": "No content"},
+                    "401": {"description": "Unauthorized"},
+                    "404": {"description": "Not found"}
+                }
+            }
         }
     },
     "components": {
@@ -107,6 +153,46 @@
                         "type": "string",
                         "example": "Larinha",
                         "description": "User's name"
+                    }
+                }
+            },
+            "PostResource": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "User's id"
+                    },
+                    "content": {
+                        "type": "string",
+                        "example": "Hello World",
+                        "description": "Post's content"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Hello",
+                        "description": "Post's title"
+                    },
+                    "user_id": {
+                        "type": "integer",
+                        "example": 1,
+                        "description": "Owner id"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "example": "2021-01-01 00:00:00",
+                        "description": "Creation datetime"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "example": "2021-01-01 00:00:00",
+                        "description": "Update datetime"
+                    },
+                    "edited": {
+                        "type": "boolean",
+                        "example": false,
+                        "description": "Post was edited"
                     }
                 }
             }
@@ -175,19 +261,31 @@
                         }
                     }
                 }
-            }
-        },
-        "responses": {
-            "200": {
-                "description": "New response",
+            },
+            "storePostRequest" : {
+                "required": true,
                 "content": {
                     "application/json": {
                         "schema": {
-                            "": ""
+                            "required": ["content"],
+                            "properties": {
+                                "content": {
+                                    "type": "string",
+                                    "example": "Hello World",
+                                    "description": "Post's content"
+                                },
+                                "title": {
+                                    "type": "string",
+                                    "example": "Hello",
+                                    "description": "Post's title"
+                                }
+                            }
                         }
                     }
                 }
-            },
+            }
+        },
+        "responses": {
             "login": {
                 "description": "logged in successful",
                 "content": {
@@ -252,6 +350,16 @@
                     "application/json": {
                         "schema": {
                             "$ref": "#/components/schemas/UserResource"
+                        }
+                    }
+                }
+            },
+            "ListPosts": {
+                "description": "List of posts",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/PostResource"
                         }
                     }
                 }

@@ -14,6 +14,7 @@ Route::group(
             Route::get('me', [JWTController::class, 'me'])->middleware('auth:api');
             Route::post('verify', [JWTController::class, 'verify'])->middleware('auth:api');
             Route::post('register', [JWTController::class, 'register']);
+            Route::post('forgot-password/{userEmail}', [JWTController::class, 'forgotPassword']);
         });
 
         Route::resource('/post', PostController::class)

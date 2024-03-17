@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -53,6 +54,10 @@ class RouteServiceProvider extends ServiceProvider
             return Post::where('id', $value)
                 ->where('user_id', auth()->id())
                 ->firstOrFail();
+        });
+
+        Route::bind('userEmail', function (string $email) {
+            return User::where('email', $email)->firstOrFail();
         });
     }
 

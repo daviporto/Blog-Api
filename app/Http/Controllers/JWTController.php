@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterUserRequest;
 use App\Http\Resources\UserResource;
+use App\Models\User;
 use App\Prototype\RegisterRequestPrototype;
 use App\Service\UserService;
 use Illuminate\Http\JsonResponse;
@@ -15,16 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class JWTController extends Controller
 {
-    /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
-    }
-
 
     public function register(RegisterUserRequest $request): Response
     {
@@ -105,6 +97,15 @@ class JWTController extends Controller
 
     public function verify(): Response
     {
+        return response()->json([
+            'message' => trans('auth.success'),
+        ]);
+    }
+
+    public function forgotPassword(ForgotPasswordRequest $request, User $user): Response
+    {
+        app(UserService::class)->forgotPassword($user);
+
         return response()->json([
             'message' => trans('auth.success'),
         ]);

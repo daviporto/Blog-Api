@@ -2,15 +2,16 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "Blog api",
-    "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "fruitcake/laravel-cors": "dev-develop",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3",
         "laravel/tinker": "^2.5",
+        "symfony/http-client": "^7.0",
+        "symfony/mailgun-mailer": "^7.0",
         "tymon/jwt-auth": "^2"
     },
     "require-dev": {

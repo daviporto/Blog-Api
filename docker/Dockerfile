@@ -28,8 +28,8 @@ RUN apt update \
         php8.2-mysql \
         php8.2-xml \
         php8.2-zip \
-        php8.2-xdebug
-    && apt -y php8.2-fpm
+        php8.2-xdebug \
+    && apt -y php8.2-fpm \
     && apt clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
 
 EXPOSE 9001
